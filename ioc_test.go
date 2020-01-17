@@ -108,9 +108,9 @@ func TestIoc_Instance_with_params_ptr(t *testing.T) {
 
 func TestIoc_Instance_with_params_const(t *testing.T) {
 	type class1 struct {
-		V1 string	`value:"config_test.class1.v1"`
-		V2 int	`value:"config_test.class1.v2"`
-		V3 bool	`value:"config_test.class1.v3"`
+		V1 string	`value:"test_config.class1.v1"`
+		V2 int	`value:"test_config.class1.v2"`
+		V3 bool	`value:"test_config.class1.v3"`
 	}
 
 	path, _ := os.Getwd()
