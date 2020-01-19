@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	SINGLETON = "singleton"
-	CONSTRUCT = "Construct"
+	SINGLETON 	= "singleton"
+	CONSTRUCT 	= "Construct"
+	INIT		= "Init"
 )
 
 // Register bean of class

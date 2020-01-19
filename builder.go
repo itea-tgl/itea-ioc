@@ -43,6 +43,10 @@ func (b *Builder) make(c reflect.Type) interface{} {
 		}
 	}
 
+	if m := ins.MethodByName(bean.InitFunc); m.IsValid() {
+		m.Call(nil)
+	}
+
 	if bean.isSingleton() {
 		bean.setInstance(ins.Interface())
 	}
@@ -58,14 +62,15 @@ func (b *Builder) field(kind reflect.Kind, tf reflect.StructField) reflect.Value
 	case reflect.Int, reflect.String, reflect.Bool:
 		if tag, ok := check(tf, VALUE); ok && b.c != nil {
 			v = b.c.Get(tag)
-			break
 		}
 		break
 	case reflect.Struct:
 		if _, ok := check(tf, WIRED); !ok {
 			break
 		}
-		return reflect.ValueOf(b.make(t)).Elem()
+		if i := b.make(t); i != nil {
+			return reflect.ValueOf(i).Elem()
+		}
 	case reflect.Ptr:
 		if _, ok := check(tf, WIRED); !ok {
 			break
@@ -84,7 +89,7 @@ func (b *Builder) load(c *config.Config) {
 }
 
 func check(field reflect.StructField, tag string) (string, bool) {
-	if t := field.Tag.Get(tag); tag != "" {
+	if t := field.Tag.Get(tag); t != "" {
 		return t, true
 	}
 	return "", false
