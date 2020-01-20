@@ -65,17 +65,16 @@ func (b *Builder) field(kind reflect.Kind, tf reflect.StructField) reflect.Value
 		}
 		break
 	case reflect.Struct:
-		if _, ok := check(tf, WIRED); !ok {
-			break
+		if _, ok := check(tf, WIRED); ok {
+			if i := b.make(t); i != nil {
+				return reflect.ValueOf(i).Elem()
+			}
 		}
-		if i := b.make(t); i != nil {
-			return reflect.ValueOf(i).Elem()
-		}
+		break
 	case reflect.Ptr:
-		if _, ok := check(tf, WIRED); !ok {
-			break
+		if _, ok := check(tf, WIRED); ok {
+			v = b.make(t.Elem())
 		}
-		v = b.make(t.Elem())
 		break
 	default:
 		break
